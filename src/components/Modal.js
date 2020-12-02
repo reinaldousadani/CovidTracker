@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useCallback } from 'react';
-import { useSpring, animated } from 'react-spring';
-import styled from 'styled-components';
-import { MdClose } from 'react-icons/md';
+import React, { useRef, useEffect, useCallback } from "react";
+import { useSpring, animated } from "react-spring";
+import styled from "styled-components";
+import { MdClose } from "react-icons/md";
 
 const Background = styled.div`
   width: 100%;
@@ -11,6 +11,10 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 0;
 `;
 
 const ModalWrapper = styled.div`
@@ -39,13 +43,13 @@ const ModalContent = styled.div`
   justify-content: center;
   align-items: center;
   line-height: 1.8;
-  .confirmed{
+  .confirmed {
     color: #ffa500;
   }
-  .death{
+  .death {
     color: #ff0000;
   }
-  .recovered{
+  .recovered {
     color: #3cb371;
   }
   p {
@@ -76,34 +80,33 @@ export const Modal = ({ showModal, setShowModal }) => {
 
   const animation = useSpring({
     config: {
-      duration: 250
+      duration: 250,
     },
     opacity: showModal ? 1 : 0,
-    transform: showModal ? `translateY(0%)` : `translateY(-100%)`
+    transform: showModal ? `translateY(0%)` : `translateY(-100%)`,
   });
 
-  const closeModal = e => {
+  const closeModal = (e) => {
     if (modalRef.current === e.target) {
       setShowModal(false);
     }
   };
 
   const keyPress = useCallback(
-    e => {
-      if (e.key === 'Escape' && showModal) {
+    (e) => {
+      if (e.key === "Escape" && showModal) {
         setShowModal(false);
       }
     },
     [setShowModal, showModal]
   );
 
-  useEffect(
-    () => {
-      document.addEventListener('keydown', keyPress);
-      return () => document.removeEventListener('keydown', keyPress);
-    },
-    [keyPress]
-  );
+  useEffect(() => {
+    document.addEventListener("keydown", keyPress);
+    return () => document.removeEventListener("keydown", keyPress);
+  }, [keyPress]);
+
+  let tes = "id";
 
   return (
     <>
@@ -111,19 +114,21 @@ export const Modal = ({ showModal, setShowModal }) => {
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <ModalWrapper showModal={showModal}>
-              <ModalImg src="https://flagcdn.com/w1280/za.png" alt='country flag' />
+              <ModalImg
+                src={`https://flagcdn.com/w1280/${tes}.png`}
+                alt="country flag"
+              />
               <ModalContent>
-                <h1 className='confirmed'>Confirmed</h1>
-                <p className='confirmed'>123</p>
-                <h1 className='recovered'>Recovered</h1>
-                <p className='recovered'>123</p>
-                <h1 className='death'>Deaths</h1>
-                <p className='death'>123</p>
-                
+                <h1 className="confirmed">Confirmed</h1>
+                <p className="confirmed">123</p>
+                <h1 className="recovered">Recovered</h1>
+                <p className="recovered">123</p>
+                <h1 className="death">Deaths</h1>
+                <p className="death">123</p>
               </ModalContent>
               <CloseModalButton
-                aria-label='Close modal'
-                onClick={() => setShowModal(prev => !prev)}
+                aria-label="Close modal"
+                onClick={() => setShowModal((prev) => !prev)}
               />
             </ModalWrapper>
           </animated.div>
