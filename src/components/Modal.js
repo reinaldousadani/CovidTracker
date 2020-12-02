@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useCallback } from "react";
 import { useSpring, animated } from "react-spring";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
+import noImg from "../image/NoImageFound.png";
 
 const Background = styled.div`
   width: 100%;
@@ -28,20 +29,26 @@ const ModalWrapper = styled.div`
   position: relative;
   z-index: 10;
   border-radius: 10px;
+  overflow: hidden;
 `;
 
 const ModalImg = styled.img`
-  width: 100%;
+  z-index: -1;
+  width: 400px;
   height: 100%;
+  object-fit: cover;
+  place-items: center;
   border-radius: 10px 0 0 10px;
   background: #000;
+  overflow: hidden;
 `;
 
 const ModalContent = styled.div`
   display: flex;
+  z-index: 1;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  place-items: center;
   line-height: 1.8;
   .confirmed {
     color: #ffa500;
@@ -51,6 +58,12 @@ const ModalContent = styled.div`
   }
   .recovered {
     color: #3cb371;
+  }
+  .country-name{
+    color: #fff;
+  }
+  .last-updated{
+    color: #fff;
   }
   p {
     margin-bottom: 1rem;
@@ -75,7 +88,7 @@ const CloseModalButton = styled(MdClose)`
   color: #fff;
 `;
 
-export const Modal = ({ showModal, setShowModal }) => {
+export const Modal = ({ showModal, setShowModal, countryName, countryAlias }) => {
   const modalRef = useRef();
 
   const animation = useSpring({
@@ -106,7 +119,7 @@ export const Modal = ({ showModal, setShowModal }) => {
     return () => document.removeEventListener("keydown", keyPress);
   }, [keyPress]);
 
-  let tes = "id";
+  
 
   return (
     <>
@@ -114,16 +127,26 @@ export const Modal = ({ showModal, setShowModal }) => {
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <ModalWrapper showModal={showModal}>
-              <ModalImg
-                src={`https://flagcdn.com/w1280/${tes}.png`}
+              {countryAlias ? (
+                <ModalImg
+                src={`https://flagcdn.com/w640/${countryAlias.toLowerCase()}.png`}
                 alt="country flag"
               />
+              ) : (
+                <ModalImg
+                src={noImg}
+                alt="country flag"
+              />
+              )}
               <ModalContent>
-                <h1 className="confirmed">Confirmed</h1>
+                <h3 className="country-name">{countryName.toUpperCase()}</h3>
+                <p className="last-updated" >(Last Updated : 00/00/00)</p>
+                <br />
+                <h4 className="confirmed">Confirmed</h4>
                 <p className="confirmed">123</p>
-                <h1 className="recovered">Recovered</h1>
+                <h4 className="recovered">Recovered</h4>
                 <p className="recovered">123</p>
-                <h1 className="death">Deaths</h1>
+                <h4 className="death">Deaths</h4>
                 <p className="death">123</p>
               </ModalContent>
               <CloseModalButton

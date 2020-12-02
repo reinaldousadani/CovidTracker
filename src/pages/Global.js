@@ -41,7 +41,8 @@ const Global = () => {
     <>
       <Topnav />
       <Header>
-        <h1>GLOBAL COVID-19 CASES</h1>
+        <h1>GLOBAL</h1>
+        <h1>COVID-19 CASES</h1>
       </Header>
       <Container>
         <Result
