@@ -6,11 +6,9 @@ import Global from "./pages/Global";
 import Indonesia from "./pages/Indonesia";
 import indoProvince from "./pages/indoProvince";
 
-
 function App() {
   return (
     <>
-    
       <Router>
         <GlobalStyle />
 
@@ -21,7 +19,6 @@ function App() {
           <Route path="/indoprovince" component={indoProvince} />
         </Switch>
       </Router>
-     
     </>
   );
 }

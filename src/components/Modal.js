@@ -1,8 +1,9 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useSpring, animated } from "react-spring";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 import noImg from "../image/NoImageFound.png";
+import axios from "axios";
 
 const Background = styled.div`
   width: 100%;
@@ -59,10 +60,10 @@ const ModalContent = styled.div`
   .recovered {
     color: #3cb371;
   }
-  .country-name{
+  .country-name {
     color: #fff;
   }
-  .last-updated{
+  .last-updated {
     color: #fff;
   }
   p {
@@ -88,7 +89,31 @@ const CloseModalButton = styled(MdClose)`
   color: #fff;
 `;
 
-export const Modal = ({ showModal, setShowModal, countryName, countryAlias }) => {
+export const Modal = ({
+  showModal,
+  setShowModal,
+  countryName,
+  countryAlias,
+}) => {
+  const [countryDisplayed, setCountryDisplayed] = useState({
+    confirmed: NaN,
+    recovered: NaN,
+    deaths: NaN,
+  });
+
+  useEffect(() => {
+    axios
+      .get(`https://covid19.mathdro.id/api/countries/${countryName}`)
+      .then((res) => {
+        setCountryDisplayed({
+          confirmed: res.data.confirmed.value,
+          deaths: res.data.deaths.value,
+          recovered: res.data.recovered.value,
+        });
+      })
+      .catch((err) => console.log(err));
+  }, [countryName]);
+
   const modalRef = useRef();
 
   const animation = useSpring({
@@ -119,8 +144,6 @@ export const Modal = ({ showModal, setShowModal, countryName, countryAlias }) =>
     return () => document.removeEventListener("keydown", keyPress);
   }, [keyPress]);
 
-  
-
   return (
     <>
       {showModal ? (
@@ -129,25 +152,21 @@ export const Modal = ({ showModal, setShowModal, countryName, countryAlias }) =>
             <ModalWrapper showModal={showModal}>
               {countryAlias ? (
                 <ModalImg
-                src={`https://flagcdn.com/w640/${countryAlias.toLowerCase()}.png`}
-                alt="country flag"
-              />
+                  src={`https://flagcdn.com/w640/${countryAlias.toLowerCase()}.png`}
+                  alt="country flag"
+                />
               ) : (
-                <ModalImg
-                src={noImg}
-                alt="country flag"
-              />
+                <ModalImg src={noImg} alt="country flag" />
               )}
               <ModalContent>
-                <h3 className="country-name">{countryName.toUpperCase()}</h3>
-                <p className="last-updated" >(Last Updated : 00/00/00)</p>
+                <h3 className="country-name">{countryName}</h3>
                 <br />
                 <h4 className="confirmed">Confirmed</h4>
-                <p className="confirmed">123</p>
+                <p className="confirmed">{countryDisplayed.confirmed}</p>
                 <h4 className="recovered">Recovered</h4>
-                <p className="recovered">123</p>
+                <p className="recovered">{countryDisplayed.recovered}</p>
                 <h4 className="death">Deaths</h4>
-                <p className="death">123</p>
+                <p className="death">{countryDisplayed.deaths}</p>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"

@@ -32,19 +32,21 @@ const CountryStyling = styled.div`
 const Countries = () => {
   const [showModal, setShowModal] = useState(false);
   const [allCountry, setAllCountry] = useState([]);
-  const [specificCountry, setSpecificCountry] = useState({name: '',alias: ''});
+  const [specificCountry, setSpecificCountry] = useState({
+    name: "",
+    alias: "",
+  });
+
+  const setCountry = (name, alias) => {
+    setSpecificCountry({
+      name: name,
+      alias: alias,
+    });
+  };
 
   const openModal = () => {
     setShowModal((prev) => !prev);
   };
-
-  const selectCountry = (country,alias) => {
-      setSpecificCountry({
-          name: `${country}`,
-          alias: `${alias}`
-      })
-      
-  }
 
   useEffect(() => {
     axios
@@ -55,6 +57,7 @@ const Countries = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  console.log(specificCountry.name);
 
   return (
     <>
@@ -73,20 +76,26 @@ const Countries = () => {
               countryAlias={country.iso2}
             ></Country>
             <Button
+              value={country.name}
               className="country-button"
               variant="secondary"
               size="lg"
               block
-              onClick={()=>{
-                  openModal();
-                  selectCountry(country.name,country.iso2);
+              onClick={() => {
+                openModal();
+                setCountry(country.name, country.iso2);
               }}
             >
               {country.name}
             </Button>
           </CountryStyling>
         ))}
-        <Modal showModal={showModal} setShowModal={setShowModal} countryName={specificCountry.name} countryAlias={specificCountry.alias}/>
+        <Modal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          countryName={specificCountry.name}
+          countryAlias={specificCountry.alias}
+        />
       </Container>
     </>
   );
