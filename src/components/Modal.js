@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 import noImg from "../image/NoImageFound.png";
 import axios from "axios";
+import { formatter } from '../utilities/formatNumber'
 
 const Background = styled.div`
   width: 100%;
@@ -162,11 +163,11 @@ export const Modal = ({
                 <h3 className="country-name">{countryName}</h3>
                 <br />
                 <h4 className="confirmed">Confirmed</h4>
-                <p className="confirmed">{countryDisplayed.confirmed}</p>
+                <p className="confirmed">{formatter.format(countryDisplayed.confirmed)}</p>
                 <h4 className="recovered">Recovered</h4>
-                <p className="recovered">{countryDisplayed.recovered}</p>
+                <p className="recovered">{formatter.format(countryDisplayed.recovered)}</p>
                 <h4 className="death">Deaths</h4>
-                <p className="death">{countryDisplayed.deaths}</p>
+                <p className="death">{formatter.format(countryDisplayed.deaths)}</p>
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"

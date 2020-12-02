@@ -26,8 +26,10 @@ const CountryStyling = styled.div`
   .country-button {
     border-radius: 0px 0px 10px 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+    background: #141414;
   }
 `;
+
 
 const Countries = () => {
   const [showModal, setShowModal] = useState(false);
@@ -57,7 +59,7 @@ const Countries = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log(specificCountry.name);
+  
 
   return (
     <>

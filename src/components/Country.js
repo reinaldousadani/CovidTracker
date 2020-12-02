@@ -1,7 +1,6 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import styled from "styled-components";
-import Button from "./Button";
 import noImg from "../image/NoImageFound.png";
 
 const Wrapper = styled.div`
