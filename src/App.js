@@ -1,5 +1,5 @@
 import { GlobalStyle } from "./globalStyles";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Countries from "./pages/Countries";
 import Global from "./pages/Global";
 import Indonesia from "./pages/Indonesia";
