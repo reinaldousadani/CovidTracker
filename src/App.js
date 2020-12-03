@@ -1,5 +1,4 @@
 import { GlobalStyle } from "./globalStyles";
-import Topnav from "./components/Topnav";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Countries from "./pages/Countries";
 import Global from "./pages/Global";
