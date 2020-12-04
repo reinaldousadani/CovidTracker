@@ -3,11 +3,16 @@ import axios from "axios";
 import Result from "../components/Result";
 import Topnav from "../components/Topnav";
 import styled from "styled-components";
+import Loader from "react-loader-spinner";
 
 const Container = styled.div`
   height: auto;
   display: grid;
   place-items: center;
+  p {
+    margin: 20px;
+    border: 20px;
+  }
 `;
 
 const Header = styled.div`
@@ -24,6 +29,9 @@ const Global = () => {
     deaths: NaN,
   });
 
+  const [loading, setLoading] = useState(true);
+
+  /* Fetch using axios */
   useEffect(() => {
     axios
       .get("https://covid19.mathdro.id/api")
@@ -33,6 +41,7 @@ const Global = () => {
           recovered: res.data.recovered.value,
           deaths: res.data.deaths.value,
         });
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -45,11 +54,18 @@ const Global = () => {
         <h1>COVID-19 CASES</h1>
       </Header>
       <Container>
-        <Result
-          confirmed={world.confirmed}
-          recovered={world.recovered}
-          deaths={world.deaths}
-        />
+        {loading ? (
+          <>
+          <Loader type="BallTriangle" color="#141414" height={80} width={80} />
+          <p>Fetching data. Please wait</p>
+          </>
+        ) : (
+          <Result
+            confirmed={world.confirmed}
+            recovered={world.recovered}
+            deaths={world.deaths}
+          />
+        )}
       </Container>
     </>
   );

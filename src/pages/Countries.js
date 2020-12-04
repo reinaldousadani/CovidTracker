@@ -5,6 +5,7 @@ import { Modal } from "../components/Modal";
 import Topnav from "../components/Topnav";
 import Country from "../components/Country";
 import Button from "react-bootstrap/Button";
+import Loader from "react-loader-spinner";
 
 const Container = styled.div`
   height: auto;
@@ -12,6 +13,20 @@ const Container = styled.div`
   grid-gap: 1rem;
   grid-template-columns: repeat(4, 1fr);
   place-items: center;
+  p {
+    margin: 20px;
+    padding: 20px;
+  }
+`;
+
+const LoadingContainer = styled.div`
+  height: auto;
+  display: grid;
+  place-items: center;
+  p {
+    margin: 20px;
+    border: 20px;
+  }
 `;
 
 const Header = styled.div`
@@ -30,7 +45,6 @@ const CountryStyling = styled.div`
   }
 `;
 
-
 const Countries = () => {
   const [showModal, setShowModal] = useState(false);
   const [allCountry, setAllCountry] = useState([]);
@@ -38,6 +52,7 @@ const Countries = () => {
     name: "",
     alias: "",
   });
+  const [loading, setLoading] = useState(true);
 
   const setCountry = (name, alias) => {
     setSpecificCountry({
@@ -55,11 +70,10 @@ const Countries = () => {
       .get("https://covid19.mathdro.id/api/countries")
       .then((res) => {
         setAllCountry(res.data.countries);
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
-
-  
 
   return (
     <>
@@ -68,37 +82,51 @@ const Countries = () => {
         <h1>COVID-19 CASES</h1>
         <h1>BY COUNTRY</h1>
       </Header>
-      <Container>
-        {allCountry.map((country) => (
-          <CountryStyling>
-            <Country
-              key={country.id}
-              openModal={openModal}
-              countryName={country.name}
-              countryAlias={country.iso2}
-            ></Country>
-            <Button
-              value={country.name}
-              className="country-button"
-              variant="secondary"
-              size="lg"
-              block
-              onClick={() => {
-                openModal();
-                setCountry(country.name, country.iso2);
-              }}
-            >
-              {country.name}
-            </Button>
-          </CountryStyling>
-        ))}
-        <Modal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          countryName={specificCountry.name}
-          countryAlias={specificCountry.alias}
-        />
-      </Container>
+      {loading ? (
+        <LoadingContainer>
+          <>
+            <Loader
+              type="BallTriangle"
+              color="#141414"
+              height={80}
+              width={80}
+            />
+            <p>Fetching data. Please wait</p>
+          </>
+        </LoadingContainer>
+      ) : (
+        <Container>
+          {allCountry.map((country) => (
+            <CountryStyling>
+              <Country
+                key={country.id}
+                openModal={openModal}
+                countryName={country.name}
+                countryAlias={country.iso2}
+              ></Country>
+              <Button
+                value={country.name}
+                className="country-button"
+                variant="secondary"
+                size="lg"
+                block
+                onClick={() => {
+                  openModal();
+                  setCountry(country.name, country.iso2);
+                }}
+              >
+                {country.name}
+              </Button>
+            </CountryStyling>
+          ))}
+          <Modal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            countryName={specificCountry.name}
+            countryAlias={specificCountry.alias}
+          />
+        </Container>
+      )}
     </>
   );
 };

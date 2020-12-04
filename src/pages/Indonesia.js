@@ -3,11 +3,16 @@ import axios from "axios";
 import Result from "../components/Result";
 import Topnav from "../components/Topnav";
 import styled from "styled-components";
+import Loader from "react-loader-spinner";
 
 const Container = styled.div`
   height: auto;
   display: grid;
   place-items: center;
+  p{
+    margin: 20px;
+    padding: 20px;
+  }
 `;
 
 const Header = styled.div`
@@ -23,6 +28,7 @@ const Indonesia = () => {
     recovered: NaN,
     deaths: NaN,
   });
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     axios
@@ -33,6 +39,7 @@ const Indonesia = () => {
           recovered: res.data.recovered.value,
           deaths: res.data.deaths.value,
         });
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -45,11 +52,23 @@ const Indonesia = () => {
         <h1>COVID-19 CASES</h1>
       </Header>
       <Container>
-        <Result
-          confirmed={indonesia.confirmed}
-          recovered={indonesia.recovered}
-          deaths={indonesia.deaths}
-        />
+        {loading ? (
+          <>
+            <Loader
+              type="BallTriangle"
+              color="#141414"
+              height={80}
+              width={80}
+            />
+            <p>Fetching data. Please wait</p>
+          </>
+        ) : (
+          <Result
+            confirmed={indonesia.confirmed}
+            recovered={indonesia.recovered}
+            deaths={indonesia.deaths}
+          />
+        )}
       </Container>
     </>
   );

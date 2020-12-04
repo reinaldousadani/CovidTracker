@@ -13,13 +13,6 @@ export const Value = (prov) => {
       </tr>
     ));
   } else {
-    return (
-      <tr>
-        <td>load</td>
-        <td>load</td>
-        <td>load</td>
-        <td>load</td>
-      </tr>
-    );
+    
   }
 };
