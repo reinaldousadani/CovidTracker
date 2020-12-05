@@ -13,7 +13,7 @@ const Container = styled.div`
   grid-gap: 1rem;
   grid-template-columns: repeat(4, 1fr);
   place-items: center;
-  p {
+  .loading {
     margin: 20px;
     padding: 20px;
   }
@@ -91,7 +91,7 @@ const Countries = () => {
               height={80}
               width={80}
             />
-            <p>Fetching data. Please wait</p>
+            <p className="loading">Fetching data. Please wait</p>
           </>
         </LoadingContainer>
       ) : (

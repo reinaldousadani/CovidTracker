@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 import noImg from "../image/NoImageFound.png";
 import axios from "axios";
-import { formatter } from '../utilities/formatNumber'
+import { formatter } from "../utilities/formatNumber";
+import Loader from "react-loader-spinner";
 
 const Background = styled.div`
   width: 100%;
@@ -102,6 +103,8 @@ export const Modal = ({
     deaths: NaN,
   });
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     axios
       .get(`https://covid19.mathdro.id/api/countries/${countryName}`)
@@ -111,6 +114,7 @@ export const Modal = ({
           deaths: res.data.deaths.value,
           recovered: res.data.recovered.value,
         });
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   }, [countryName]);
@@ -128,6 +132,7 @@ export const Modal = ({
   const closeModal = (e) => {
     if (modalRef.current === e.target) {
       setShowModal(false);
+      setLoading(true);
     }
   };
 
@@ -135,6 +140,7 @@ export const Modal = ({
     (e) => {
       if (e.key === "Escape" && showModal) {
         setShowModal(false);
+        setLoading(true);
       }
     },
     [setShowModal, showModal]
@@ -163,15 +169,51 @@ export const Modal = ({
                 <h3 className="country-name">{countryName}</h3>
                 <br />
                 <h4 className="confirmed">Confirmed</h4>
-                <p className="confirmed">{formatter.format(countryDisplayed.confirmed)}</p>
+                {loading ? (
+                  <Loader
+                    type="ThreeDots"
+                    color="#ffa500"
+                    height={20}
+                    width={20}
+                  />
+                ) : (
+                  <p className="confirmed">
+                    {formatter.format(countryDisplayed.confirmed)}
+                  </p>
+                )}
                 <h4 className="recovered">Recovered</h4>
-                <p className="recovered">{formatter.format(countryDisplayed.recovered)}</p>
+                {loading ? (
+                  <Loader
+                    type="ThreeDots"
+                    color="#3cb371"
+                    height={20}
+                    width={20}
+                  />
+                ) : (
+                  <p className="recovered">
+                    {formatter.format(countryDisplayed.recovered)}
+                  </p>
+                )}
                 <h4 className="death">Deaths</h4>
-                <p className="death">{formatter.format(countryDisplayed.deaths)}</p>
+                {loading ? (
+                  <Loader
+                    type="ThreeDots"
+                    color="#ff0000"
+                    height={20}
+                    width={20}
+                  />
+                ) : (
+                  <p className="death">
+                    {formatter.format(countryDisplayed.deaths)}
+                  </p>
+                )}
               </ModalContent>
               <CloseModalButton
                 aria-label="Close modal"
-                onClick={() => setShowModal((prev) => !prev)}
+                onClick={() => {
+                  setShowModal((prev) => !prev);
+                  setLoading(true);
+                }}
               />
             </ModalWrapper>
           </animated.div>
